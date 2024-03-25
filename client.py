@@ -33,19 +33,11 @@ scrollbar.place(relheight=1, relx=0.974)
 e = Entry(root, bg="#2C3E50", fg=TEXT_COLOR, font=FONT, width=55)
 e.grid(row=2, column=0)
 
-# send = Button(root, text="Send", font=FONT_BOLD, bg=BG_GRAY,
-# 			command=sender).grid(row=2, column=1)
 
 
 
 
-# define sender() and receiver() to be used locally in client_main() where we can pass s obj
-# def sender(s):
-#     while True:
-#         message = input("Enter message: ")
-#         s.sendall(message.encode("utf-32"))
-#         if message.lower() == "bye":
-#             break
+# define receiver() to be used locally in client_main() where we can pass s obj
 def receiver(s):
     while True:
         data = s.recv(1024)
@@ -57,7 +49,6 @@ def client_main(SERVER_HOST, SERVER_PORT):
     # creating client socket as s to connect to server, using TCP/IP -- IP = (AF_INET) via TCP = (SOCK_STREAM))
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((SERVER_HOST, SERVER_PORT))
-        # data = s.recv(1024)
 
         def sender():
             if s:
@@ -66,20 +57,16 @@ def client_main(SERVER_HOST, SERVER_PORT):
                 s.sendall(e.get().encode("utf-32"))
                 e.delete(0, END)
 
-
-
         Button(root, text="Send", font=FONT_BOLD, bg=BG_GRAY,
                command=sender).grid(row=2, column=1)
-#maintaining server connection while messages are sent "bye" to exit the loop
- # create 2 thread instances to run the sender + receiver functions concurrently
- #        sender_thread = threading.Thread(target=sender, args=(s,))
+
+        # create thread instance for reciever to run functions concurrently (sender thread handled in sender())
         receiver_thread = threading.Thread(target=receiver, args=(s,))
- #
- #        # .start calls the functions on respective threads
- #        sender_thread.start()
+
+        # .start calls the function on it's own thread
         receiver_thread.start()
 
-        # opens chat window, closing window ends program
+        # opens chat window and blocks until the window is closed
         root.mainloop()
 
 

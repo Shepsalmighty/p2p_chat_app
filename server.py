@@ -36,20 +36,7 @@ e.grid(row=2, column=0)
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
 
-# define sender() + reciever() to be called locally in server_main where we can pass conn obj
-# def sender(conn):
-#     while True:
-#         message = input("Enter message: ")
-#         conn.sendall(message.encode("utf-32"))
-#
-#         if message.lower() == "bye":
-#             break
-#         return conn.sendall(message.encode("utf-32"))
-
-
-
-
-
+# define receiver() to be called locally in server_main where we can pass conn obj
 def receiver(conn):
     while True:
         data = conn.recv(1024)
@@ -59,6 +46,7 @@ def receiver(conn):
 
 
 def server_main(HOST, PORT):
+
     # creating server socket as s via TCP/IP
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # binds the socket to the specified port and IP
@@ -66,8 +54,6 @@ def server_main(HOST, PORT):
 
         # instructing the server to listen for connection requests (breaks if no connection)
         s.listen()
-
-
 
         #assigns the server socket to conn and client IP + Port to addr. s.accept() completes the handshake
         conn, addr = s.accept()
@@ -89,16 +75,12 @@ def server_main(HOST, PORT):
             # create 2 thread instances to run the sender + receiver functions concurrently
             Button(root, text="Send", font=FONT_BOLD, bg=BG_GRAY,
                           command=sender).grid(row=2, column=1)
-            # sender_thread = threading.Thread(target=sender, args=(conn,))
+            # create thread instance for reciever to run functions concurrently with sender - (thread handled in sender())
             receiver_thread = threading.Thread(target=receiver, args=(conn,))
 
-            # .start calls the functions on respective threads
-            # sender_thread.start()
             receiver_thread.start()
 
-            # receiver_thread.join()
-
-            # opens chat window, closing window ends program
+            # opens chat window and blocks until window is closed
             root.mainloop()
 
 
