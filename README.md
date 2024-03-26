@@ -1,1 +1,1 @@
-Peer to peer chat bot with gui via TCP/IP
+TCP/IP - peer to peer chat bot with gui 
