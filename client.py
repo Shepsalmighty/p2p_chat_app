@@ -19,10 +19,8 @@ TEXT_COLOR = "#EAECEE"
 FONT = "Helvetica 14"
 FONT_BOLD = "Helvetica 13 bold"
 
-
-
 lable1 = Label(root, bg=BG_COLOR, fg=TEXT_COLOR, text="Welcome", font=FONT_BOLD, pady=10, width=20, height=1).grid(
-	row=0)
+    row=0)
 
 txt = Text(root, bg=BG_COLOR, fg=TEXT_COLOR, font=FONT, width=60)
 txt.grid(row=1, column=0, columnspan=2)
@@ -34,9 +32,6 @@ e = Entry(root, bg="#2C3E50", fg=TEXT_COLOR, font=FONT, width=55)
 e.grid(row=2, column=0)
 
 
-
-
-
 # define receiver() to be used locally in client_main() where we can pass s obj
 def receiver(s):
     while True:
@@ -44,6 +39,7 @@ def receiver(s):
         if not data:
             break
         txt.insert(END, "\n" + f"Received: {data.decode("utf-32")}")
+
 
 def client_main(SERVER_HOST, SERVER_PORT):
     # creating client socket as s to connect to server, using TCP/IP -- IP = (AF_INET) via TCP = (SOCK_STREAM))
@@ -70,7 +66,5 @@ def client_main(SERVER_HOST, SERVER_PORT):
         root.mainloop()
 
 
-
 if __name__ == "__main__":
     client_main(SERVER_HOST, SERVER_PORT)
-
